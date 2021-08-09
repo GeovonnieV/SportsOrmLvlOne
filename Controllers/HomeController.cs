@@ -66,21 +66,27 @@ namespace SportsORM.Controllers
             ViewBag.FirstNameJoshua = _context.Players
                 .Where(p => p.FirstName == "Joshua");
             // LastName is Cooper but FirstName is not Joshua
-            ViewBag.CooperPlayers  = _context.Players
+            ViewBag.CooperPlayers = _context.Players
                 .Where(player => player.LastName == "Cooper" && player.FirstName != "Joshua");
             // all players with first name "Alexander" OR first name "Wyatt"
             ViewBag.AlexOrWyatt = _context.Players
                 .Where(p => p.FirstName == "Alexander" || p.FirstName == "Wyatt");
             // all leagues in the Atlantic region
-             ViewBag.AtlanticTeams = _context.Leagues
-                .Where(t => t.Name.Contains("Atlantic"))
-                .ToList();
+            ViewBag.AtlanticTeams = _context.Leagues
+               .Where(t => t.Name.Contains("Atlantic"))
+               .ToList();
             // all teams named the Raptors
             ViewBag.RaptorTeams = _context.Teams
                 .Where(t => t.TeamName.Contains("Raptors"));
             // all teams whose location includes "City"
             ViewBag.CityTeams = _context.Teams
                 .Where(t => t.Location.Contains("City"));
+            // Starts with T
+            ViewBag.StartWithT = _context.Teams
+               .Where(team => team.TeamName.StartsWith("T"));
+            // No football
+            ViewBag.NonFootballLeague = _context.Leagues
+               .Where(league => league.Sport != "Football");
 
             return View("Level1");
         }

@@ -8,72 +8,96 @@
                 @foreach (var league in ViewBag.WomansLeagues)
                 {
                     <p>@league.Name</p>
+
                 }
             }
             <li>...all leagues where sport is any type of hockey</li>
             @foreach (var team in ViewBag.HockeyLeagues)
             {
                 <p>@team.Name</p>
+
             }
             <li>...all leagues where sport is something OTHER THAN football</li>
+            @foreach (var l in ViewBag.NonFootballLeague)
+            {
+                <p>@l.Name</p>
 
+            }
             <li>...all leagues that call themselves "conferences"</li>
             @foreach (var c in ViewBag.Conferences)
             {
                 <p>@c.Name</p>
+
             }
             <li>...all leagues in the Atlantic region</li>
             @foreach (var l in ViewBag.AtlanticTeams)
             {
                 <p>@l.Name</p>
+
             }
             <li>...all teams based in Dallas</li>
             @foreach (var team in ViewBag.DallasTeams)
             {
                 <p>@team.TeamName</p>
+
             }
             <li>...all teams named the Raptors</li>
             @foreach (var t in ViewBag.RaptorTeams)
             {
-                <p>@t.Location,  @t.TeamName</p>
+                <p>@t.Location, @t.TeamName</p>
+
             }
 
             <li>...all teams whose location includes "City"</li>
             @foreach (var t in ViewBag.CityTeams)
             {
                 <p>@t.Location ,@t.TeamName</p>
+
             }
             <li>...all teams whose names begin with "T"</li>
+            @foreach (var team in ViewBag.StartWithT)
+            {
+                <p>@team.TeamName</p>
+
+            }
             <li>...all teams, ordered alphabetically by location</li>
             @foreach (var team in ViewBag.TeamAlphaOrder)
             {
                 <p>@team.TeamName , @team.Location</p>
+
             }
             <li>...all teams, ordered by team name in reverse alphabetical order</li>
             @foreach (var t in ViewBag.TeamDescOrder)
             {
                 <p>@t.TeamName , @t.Location</p>
+
             }
             <li>...every player with last name "Cooper"</li>
             @foreach (var p in ViewBag.LastNameCooper)
             {
-                 <p> @p.FirstName, @p.LastName </p>
+                <p> @p.FirstName, @p.LastName </p>
+
             }
             <li>...every player with first name "Joshua"</li>
             @foreach (var p in ViewBag.FirstNameJoshua)
             {
                 <p>@p.FirstName, @p.LastName</p>
+
             }
             <li>...every player with last name "Cooper" EXCEPT those with "Joshua" as the first name</li>
             @foreach (var player in ViewBag.CooperPlayers)
             {
                 <p>@player.FirstName, @player.LastName</p>
+
             }
             <li>...all players with first name "Alexander" OR first name "Wyatt"</li>
             @foreach (var p in ViewBag.AlexOrWyatt)
             {
                 <p>@p.FirstName, @p.LastName</p>
+
             }
+
+
         </ol>
     </div>
 </div>
