@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SportsORM.Models;
 
 
@@ -94,6 +95,75 @@ namespace SportsORM.Controllers
         [HttpGet("level_2")]
         public IActionResult Level2()
         {
+            // The name of the league that Penguins currently belong to 
+            ViewBag.PenguinsLeague = _context.Teams
+                .Include(team => team.CurrLeague)
+                .FirstOrDefault(team => team.TeamName == "Penguins");
+
+            // all teams in the Atlantic Soccer Conference 
+            ViewBag.AtlanticTeams = _context.Leagues
+                .Include(league => league.Teams)
+                .FirstOrDefault(league => league.Name == "Atlantic Soccer Conference");
+            // all (current) players on the Boston Penguins (Hint: Boston is the Location, Penguins is the TeamName)
+            ViewBag.BostonPlayers = _context.Players
+                .Include(player => player.CurrentTeam)
+                .Where(player => player.CurrentTeam.TeamName == "Penguins")
+                .ToList();
+
+            // all (current) players in the International Collegiate Baseball Conference
+            // goes to Players table
+            ViewBag.PlayersFromCol = _context.Players
+           //  include the current teams field in players
+           .Include(players => players.CurrentTeam)
+           // Team has the League in it we can include in it
+           .ThenInclude(currentTeam => currentTeam.CurrLeague)
+           // the player table has current team and the team table has a current league that has a league name
+           .Where(
+               player => player.CurrentTeam.CurrLeague.Name == "International Collegiate Baseball Conference"
+               );
+
+            // Teams with Sophia
+            ViewBag.TeamsWithSophia = _context.Teams
+              .Include(team => team.CurrentPlayers)
+            //   team.currentPlayers gets us in players and it wants any player with the name sophia
+              .Where(team => team.CurrentPlayers.Any(player => player.FirstName == "Sophia"));
+
+            // all leagues with a (current) player named "Sophia"
+            ViewBag.LeaguesWithSophia = _context.Leagues
+                .Include(leg => leg.Teams)
+                .ThenInclude(teams => teams.CurrentPlayers)
+                // any gets us in the teams table and then the players table to find sophia
+                .Where(leg => leg.Teams.Any(team => team.CurrentPlayers.Any(player => player.FirstName == "Sophia")))
+                .ToList();
+
+            // all (current) players in the American Conference of Amateur Football with last name "Lopez"
+            // Same as icb but we need the last name to be lopez as well
+            ViewBag.LopezPlayers = _context.Players
+           //  include the current teams field in players
+           .Include(players => players.CurrentTeam)
+           // Team has the League in it we can include in it
+           .ThenInclude(currentTeam => currentTeam.CurrLeague)
+           // the player table has current team and the team table has a current league that has a league name
+           .Where(
+               player => player.CurrentTeam.CurrLeague.Name == "American Conference of Amateur Football" && player.LastName == "Lopez"
+               );
+
+            // all football players
+            // start in players go to teams from teams to league to grab the sport 
+            ViewBag.AllFootballPlayers = _context.Players
+                .Include(player => player.CurrentTeam)
+                .ThenInclude(currentTeam => currentTeam.CurrLeague)
+                 .Where(
+                player => player.CurrentTeam.CurrLeague.Sport == "Football"
+                );
+
+            // everyone with the last name "Flores" who DOESN'T (currently) play for the Washington Roughriders
+            ViewBag.AllFlores = _context.Players
+                .Include(player => player.CurrentTeam)
+                .Where(player => player.LastName == "Flores" && player.CurrentTeam.TeamName != "Washington Roughriders")
+                .ToList();
+
+
             return View();
         }
 
